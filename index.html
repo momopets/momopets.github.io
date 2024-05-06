@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Momopets - Calculadora de Ración</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #FFFFF0; /* Amarillo pastel */
+                color: #333333;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                max-width: 410px;
+                margin: 0 auto;
+                padding: 40px;
+                background-color: #FFA500; /* Naranja pastel */
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #FFFFFF; /* Blanco */
+            }
+    
+            label {
+                display: block;
+                font-size: 16px;
+                margin-bottom: 10px;
+                color: #333333;
+            }
+    
+            input, select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #CCCCCC;
+                border-radius: 5px;
+            }
+    
+            button {
+                background-color: #32CD32; /* Verde limón */
+                color: #FFFFFF;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+    
+            button:hover {
+                background-color: #228B22; /* Verde más oscuro al pasar el ratón */
+            }
+    
+            #result {
+                font-size: 18px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+<body>
+    <div class="container">
+        <h1>Momopets - Calculadora de Ración</h1>
+        <label for="weight">Peso de la mascota (kg):</label>
+        <input type="number" id="weight" placeholder="Ingrese el peso" required>
+        <label for="age">Edad de la mascota:</label>
+        <select id="age">
+            <option value="0-6">0-6 meses</option>
+            <option value="6-108">6 meses - 9 años</option>
+            <option value="108+">Mayor a 9 años</option>
+        </select>
+        <label for="size">Tamaño de la mascota:</label>
+        <select id="size">
+            <option value="small">Pequeño (1-13 kg)</option>
+            <option value="medium">Mediano (13-20 kg)</option>
+            <option value="large">Grande (20-35 kg)</option>
+            <option value="extra-large">Extra grande (35+ kg)</option>
+        </select>
+        <button onclick="calculateRation()">Calcular Ración</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateRation() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = document.getElementById('age').value;
+            const size = document.getElementById('size').value;
+
+            let factor = 0;
+            if (age === '0-6') {
+                factor = 0.08;
+            } else if (age === '6-108') {
+                factor = 0.04;
+            } else if (age === '108+') {
+                factor = 0.035;
+            }
+
+            // Ajuste según el tamaño de la mascota
+            if (size === 'small' && 'weight > 13'){
+                factor -= 0.005;
+            } else if (size === 'medium') {
+                if (weight >= 13 && weight <= 18) {
+                    factor += 0.005;
+                } else if (weight >= 19 && weight <= 20) {
+                    factor -= 0.005;
+                }
+            } else if (size === 'large') {
+                if (weight >= 20 && weight <= 34) {
+                    factor += 0.005;
+                } else if (weight >= 34 && weight <= 35) {
+                    factor -= 0.005;
+                }
+            } else if (size === 'extra-large') {
+                if (weight > 35) {
+                    factor += 0.005;
+                } else if (weight >= 34 && weight <= 35) {
+                    factor -= 0.005;
+                }
+            }
+            let totalRation = (weight  * 1000) * factor;
+
+            document.getElementById('result').textContent = `Ración diaria recomendada: ${totalRation.toFixed(2)} gramos`;
+        }
+    </script>
+</body>
+</html>
